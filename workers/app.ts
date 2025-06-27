@@ -12,14 +12,14 @@ declare module "react-router" {
   }
 }
 
+const requestHandler = createRequestHandler(
+  () => import("virtual:react-router/server-build"),
+  "production"
+);
+
 export default {
   async fetch(request, env, ctx) {
     const db = drizzle(env.DB, { schema });
-
-    const requestHandler = createRequestHandler(
-      await import("virtual:react-router/server-build"),
-      import.meta.env.MODE
-    );
 
     return requestHandler(request, {
       cloudflare: { env, ctx },
